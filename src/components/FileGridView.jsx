@@ -1,31 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import ImageCanvas from './ImageCanvas.jsx';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ImageCanvas from "./ImageCanvas.jsx";
+import PropTypes from "prop-types";
 
 const FileGridView = ({ filter }) => {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [abortController, setAbortController] = useState(null); // Add abort controller
 
   useEffect(() => {
-    fetchImages();
-  }, [filter]);
+    const controller = new AbortController(); // Create a new controller for each request
+    setAbortController(controller);
 
-  const fetchImages = async () => {
+    // Fetch images whenever the filter or page changes
+    fetchImages(controller.signal);
+
+    // Cleanup function to abort the previous request if a new one is initiated
+    return () => {
+      if (abortController) {
+        abortController.abort(); // Abort the previous request
+      }
+    };
+  }, [filter, page]);
+
+  const fetchImages = async (signal) => {
     try {
-      const response = await axios.get(`https://api.example.com/images`, {
-        params: { page, filter },  // Mocked API; replace with your API or data
+      const query = filter.map((queryParam) => `query=${queryParam}`).join("&");
+      const apiURL = `https://api.pexels.com/v1/search?${query}&page=${page}&per_page=20`;
+      
+      const response = await axios.get(apiURL, {
+        headers: {
+          Authorization: "563492ad6f91700001000001af762a74bbf447dd8b768b453406edc7",
+        },
+        signal, // Pass the abort signal
       });
-      setImages((prevImages) => [...prevImages, ...response.data]);
-      if (response.data.length === 0) setHasMore(false);
+
+      // Only update images if there are images in the response
+      if (response.data.photos.length > 0) {
+        setImages((prevImages) => [...prevImages, ...response.data.photos]);
+      } else {
+        setHasMore(false); // No more images to load
+      }
     } catch (error) {
-      console.error('Error fetching images', error);
+      if (axios.isCancel(error)) {
+        console.log("Request canceled", error.message);
+      } else {
+        console.error("Error fetching images", error);
+        setHasMore(false); // Stop fetching more if there's an error
+      }
     }
   };
 
   const fetchMoreImages = () => {
-    setPage((prevPage) => prevPage + 1);
+    if (hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
   return (
@@ -37,8 +68,8 @@ const FileGridView = ({ filter }) => {
       endMessage={<p>No more images</p>}
     >
       <div className="image-grid">
-        {images.map((image) => (
-          <ImageCanvas key={image.id} src={image.url} alt={image.title} />
+        {images.map((image, index) => (
+          <ImageCanvas key={index} src={image.src.large} alt={image.alt} />
         ))}
       </div>
     </InfiniteScroll>
@@ -46,3 +77,7 @@ const FileGridView = ({ filter }) => {
 };
 
 export default FileGridView;
+
+FileGridView.propTypes = {
+  filter: PropTypes.array.isRequired,
+};

@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import FileGridView from './components/FileGridView.jsx';
-import ClusterView from './components/ClusterView.jsx';
-import FilterComponent from './components/FilterComponent.jsx';
+import { useState } from "react";
+import FileGridView from "./components/FileGridView.jsx";
+import ClusterView from "./components/ClusterView.jsx";
+import FilterComponent from "./components/FilterComponent.jsx";
 
 const App = () => {
-  const [view, setView] = useState('files'); // 'files' or 'cluster'
-  const [filter, setFilter] = useState([]);
+  const [view, setView] = useState("files"); // 'files' or 'cluster'
+  const [filter, setFilter] = useState(["tree"]);
 
   const handleFilterChange = (filter) => {
     setFilter(filter);
@@ -13,13 +13,13 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1>File Grid Viewer</h1>
+      <h1>{view.toLocaleUpperCase()} View</h1>
       <FilterComponent onFilterChange={handleFilterChange} />
       <div className="view-switch">
-        <button onClick={() => setView('files')}>Files View</button>
-        <button onClick={() => setView('cluster')}>Cluster View</button>
+        <button onClick={() => setView("files")}>Files View</button>
+        <button onClick={() => setView("cluster")}>Cluster View</button>
       </div>
-      {view === 'files' ? (
+      {view === "files" ? (
         <FileGridView filter={filter} />
       ) : (
         <ClusterView filter={filter} />

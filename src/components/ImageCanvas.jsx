@@ -1,22 +1,11 @@
-import { useRef, useEffect } from "react";
-
+import PropTypes from "prop-types";
 const ImageCanvas = ({ src, alt }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-
-    img.src = src;
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-    };
-  }, [src]);
-
-  return <canvas ref={canvasRef} alt={alt}></canvas>;
+  return <img src={src} alt={alt} />;
 };
 
 export default ImageCanvas;
+
+ImageCanvas.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+};

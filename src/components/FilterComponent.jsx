@@ -1,32 +1,37 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 const FilterComponent = ({ onFilterChange }) => {
-  const [selectedObjects, setSelectedObjects] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleObjectChange = (e) => {
+  // Handle text input for keyword search
+  const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSelectedObjects((prev) => 
-      prev.includes(value) ? prev.filter((obj) => obj !== value) : [...prev, value]
-    );
-    onFilterChange(selectedObjects);
+    setSearchTerm(value);
+    onFilterChange(searchTerm.split(" "));
   };
-
-  const objects = ['car', 'person', 'animal', 'tree'];
 
   return (
     <div className="filter">
-      {objects.map((object) => (
-        <label key={object}>
+      {/* Search input */}
+      <div>
+        <label>
+          Search for photos:
           <input
-            type="checkbox"
-            value={object}
-            onChange={handleObjectChange}
+            className="search-input"
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Type to search..."
           />
-          {object}
         </label>
-      ))}
+      </div>
     </div>
   );
 };
 
 export default FilterComponent;
+
+FilterComponent.propTypes = {
+  onFilterChange: PropTypes.func.isRequired,
+};
