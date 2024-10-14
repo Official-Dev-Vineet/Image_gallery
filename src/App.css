@@ -1,0 +1,51 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.category-filter {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.category-filter button {
+  margin: 0 10px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.category-filter button:hover {
+  background-color: #45a049;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 15px;
+  padding: 20px;
+}
+
+.image-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.image-card p {
+  margin-top: 10px;
+  font-size: 1rem;
+}

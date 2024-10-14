@@ -1,0 +1,60 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  text-align: center;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 15px;
+  padding: 20px;
+}
+
+.cluster {
+  margin: 20px;
+}
+
+.cluster-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.filter {
+  margin: 20px;
+}
+
+.view-switch {
+  margin: 20px;
+}
+
+.view-switch button {
+  margin: 0 10px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
